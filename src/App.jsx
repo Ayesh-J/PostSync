@@ -6,6 +6,8 @@ import { Routes, Route } from 'react-router-dom'
 //components imports
 import Navbar from './components/Navbar'
 import HowItWorks from './components/HowItWorks'
+import Testimonials from './components/Testimonials'
+import FeedbackSection from './components/Feedback'
 import Footer from './components/Footer'
 
 
@@ -20,6 +22,8 @@ function App() {
 
       <LandingPage />
       <HowItWorks />
+      <Testimonials/>
+      <FeedbackSection/>
       <Footer/>
 
     </>

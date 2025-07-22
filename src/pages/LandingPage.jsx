@@ -14,7 +14,7 @@ const LandingPage = () => {
                 <p className="text-lg md:text-xl mb-8 max-w-xl">
                     Your all-in-one platform for publishing content effortlessly across multiple social networks.
                 </p>
-                <button className="bg-white text-black px-6 py-2 rounded-2xl font-semibold hover:shadow-lg transition">
+                <button className="border-white border-2 text-white px-6 py-2 rounded-2xl font-semibold hover:bg-white hover:text-[#1d176d] transition duration-300">
                     Get Started
                 </button>
 

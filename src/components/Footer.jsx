@@ -3,7 +3,7 @@ import { Instagram, Facebook, Twitter, Linkedin } from "lucide-react";
 
 const Footer = () => {
     return (
-        <footer className="bg-[#0b082b] text-white py-10 px-6 mt-10">
+        <footer className="bg-[#0b082b] text-white py-10 px-6">
             <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
                 <div className="text-center md:text-left">
                     <h2 className="text-xl font-bold text-primary">PostSync</h2>

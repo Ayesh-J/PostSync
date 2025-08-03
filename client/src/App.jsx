@@ -1,33 +1,39 @@
-import { useState } from 'react'
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route } from 'react-router-dom';
+import Navbar from './components/Navbar';
+import HowItWorks from './components/HowItWorks';
+import Testimonials from './components/Testimonials';
+import FeedbackSection from './components/Feedback';
+import Footer from './components/Footer';
 
-
-
-//components imports
-import Navbar from './components/Navbar'
-import HowItWorks from './components/HowItWorks'
-import Testimonials from './components/Testimonials'
-import FeedbackSection from './components/Feedback'
-import Footer from './components/Footer'
-
-
-//page imports
-import LandingPage from './pages/LandingPage'
+// Page imports
+import LandingPage from './pages/LandingPage';
+import Dashboard from './pages/Dashboard';
+import LoginPage from './auth/Login'; // Make sure this exists
 
 function App() {
-
   return (
     <>
       <Navbar />
 
-      <LandingPage />
-      <HowItWorks />
-      <Testimonials/>
-      <FeedbackSection/>
-      <Footer/>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <>
+              <LandingPage />
+              <HowItWorks />
+              <Testimonials />
+              <FeedbackSection />
+              <Footer />
+            </>
+          }
+        />
 
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/login" element={<LoginPage />} />
+      </Routes>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

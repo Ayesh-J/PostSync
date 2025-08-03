@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
     return (
@@ -15,12 +16,17 @@ const Navbar = () => {
 
             {/* login/register buttons */}
             <div className="space-x-4">
-                <button className="px-4 py-2 rounded-md bg-gradient-to-r from-[#00CFFF] to-[#D24AFF] text-white font-semibold hover:scale-105 transition duration-300">
+                <Link to="/login">
+                <button className="border-white border-2 text-white px-6 py-2 rounded-2xl font-semibold hover:bg-white hover:text-[#1d176d] transition duration-300">
+                    Get Started
+                </button>
+                </Link>
+                {/* <button className="px-4 py-2 rounded-md bg-gradient-to-r from-[#00CFFF] to-[#D24AFF] text-white font-semibold hover:scale-105 transition duration-300">
                     Login
-                </button>
-                <button className="px-4 py-2 rounded-md border-2 border-white text-white font-semibold hover:bg-white hover:text-[#1d176d] transition duration-300">
+                </button> */}
+                {/* <button className="px-4 py-2 rounded-md border-2 border-white text-white font-semibold hover:bg-white hover:text-[#1d176d] transition duration-300">
                     Register
-                </button>
+                </button> */}
             </div>
         </nav>
     );

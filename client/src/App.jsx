@@ -23,7 +23,7 @@ function App() {
               <LandingPage />
               <HowItWorks />
               <Testimonials />
-              <FeedbackSection />
+              <FeedbackSection/>
               <Footer />
             </>
           }

@@ -1,25 +1,33 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Mail, Lock, Eye, EyeOff } from "lucide-react";
+import { Mail, Lock, Eye, EyeOff, User } from "lucide-react";
 
-const LoginPage = () => {
+const SignupPage = () => {
   const navigate = useNavigate();
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  const handleLogin = async (e) => {
+  const handleSignup = async (e) => {
     e.preventDefault();
 
+    if (password !== confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
+
     try {
-      const response = await fetch("http://localhost:5000/api/login", {
+      const response = await fetch("http://localhost:5000/api/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ name, email, password }),
       });
 
       const data = await response.json();
@@ -28,7 +36,7 @@ const LoginPage = () => {
         localStorage.setItem("token", data.token);
         navigate("/dashboard");
       } else {
-        setError(data.message || "Login failed");
+        setError(data.message || "Signup failed");
       }
     } catch (err) {
       setError("Server error. Try again later.");
@@ -51,7 +59,7 @@ const LoginPage = () => {
         whileHover={{ scale: 1.02 }}
         className="flex flex-col md:flex-row bg-white/10 backdrop-blur-md rounded-2xl shadow-xl w-full max-w-4xl overflow-hidden border border-white/20"
       >
-        {/* Left: Login Form */}
+        {/* Left: Signup Form */}
         <motion.div
           initial={{ opacity: 0, x: -50 }}
           animate={{ opacity: 1, x: 0 }}
@@ -59,7 +67,7 @@ const LoginPage = () => {
           className="md:w-1/2 p-8"
         >
           <h2 className="text-3xl font-bold mb-6 text-center text-white">
-            Login to PostSync
+            Create your PostSync account
           </h2>
 
           {error && (
@@ -73,14 +81,25 @@ const LoginPage = () => {
             </motion.p>
           )}
 
-          <form onSubmit={handleLogin} className="space-y-4">
+          <form onSubmit={handleSignup} className="space-y-4">
+            {/* Name */}
+            <div className="relative">
+              <label className="block text-sm font-medium text-white">Full Name</label>
+              <User size={18} className="absolute left-3 top-9 text-white/70" />
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="pl-10 mt-1 w-full p-2 border border-white/30 rounded-lg bg-white/20 text-white placeholder:text-white/70 focus:outline-none focus:ring-2 focus:ring-[#ffd700]"
+                required
+                placeholder="John Doe"
+              />
+            </div>
+
             {/* Email */}
             <div className="relative">
               <label className="block text-sm font-medium text-white">Email</label>
-              <Mail
-                size={18}
-                className="absolute left-3 top-9 text-white/70"
-              />
+              <Mail size={18} className="absolute left-3 top-9 text-white/70" />
               <input
                 type="email"
                 value={email}
@@ -94,10 +113,7 @@ const LoginPage = () => {
             {/* Password */}
             <div className="relative">
               <label className="block text-sm font-medium text-white">Password</label>
-              <Lock
-                size={18}
-                className="absolute left-3 top-9 text-white/70"
-              />
+              <Lock size={18} className="absolute left-3 top-9 text-white/70" />
               <input
                 type={showPassword ? "text" : "password"}
                 value={password}
@@ -115,6 +131,27 @@ const LoginPage = () => {
               </button>
             </div>
 
+            {/* Confirm Password */}
+            <div className="relative">
+              <label className="block text-sm font-medium text-white">Confirm Password</label>
+              <Lock size={18} className="absolute left-3 top-9 text-white/70" />
+              <input
+                type={showConfirmPassword ? "text" : "password"}
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                className="pl-10 pr-10 mt-1 w-full p-2 border border-white/30 rounded-lg bg-white/20 text-white placeholder:text-white/70 focus:outline-none focus:ring-2 focus:ring-[#ffd700]"
+                required
+                placeholder="••••••••"
+              />
+              <button
+                type="button"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                className="absolute right-3 top-9 text-white/70 hover:text-white"
+              >
+                {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+              </button>
+            </div>
+
             {/* Submit */}
             <motion.button
               whileHover={{
@@ -125,19 +162,19 @@ const LoginPage = () => {
               type="submit"
               className="w-full bg-[#ffd700] text-black font-semibold py-2 rounded-lg hover:bg-[#e6c200] transition"
             >
-              Login
+              Sign Up
             </motion.button>
           </form>
         </motion.div>
 
-        {/* Right: Social Logins */}
+        {/* Right: Social Signup */}
         <motion.div
           initial={{ opacity: 0, x: 50 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.7, delay: 0.2 }}
           className="md:w-1/2 bg-white/5 p-8 flex flex-col justify-center items-center gap-6 border-t md:border-t-0 md:border-l border-white/20"
         >
-          <h3 className="text-xl font-semibold text-white">Or login using</h3>
+          <h3 className="text-xl font-semibold text-white">Or sign up using</h3>
 
           <motion.button
             whileHover={{ scale: 1.1 }}
@@ -149,7 +186,7 @@ const LoginPage = () => {
               src="https://img.icons8.com/color/16/000000/google-logo.png"
               alt="Google"
             />
-            Continue with Google
+            Sign up with Google
           </motion.button>
 
           <motion.button
@@ -162,14 +199,13 @@ const LoginPage = () => {
               src="https://img.icons8.com/ios-filled/16/ffffff/facebook-new.png"
               alt="Facebook"
             />
-            Continue with Facebook
+            Sign up with Facebook
           </motion.button>
-          <h3>New to PostSync? <a href="/signup" className="text-[#ffd700]">Create an account</a></h3>
-          <h2><a href="/forgot-password" className="text-[#ffd700]">Forgot password?</a></h2>
+          <h3>Already have an account? <a href="/login" className="text-[#ffd700]">Login</a></h3>
         </motion.div>
       </motion.div>
     </div>
   );
 };
 
-export default LoginPage;
+export default SignupPage;

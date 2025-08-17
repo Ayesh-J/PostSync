@@ -8,7 +8,8 @@ import Footer from './components/Footer';
 // Page imports
 import LandingPage from './pages/LandingPage';
 import Dashboard from './pages/Dashboard';
-import LoginPage from './auth/Login'; // Make sure this exists
+import LoginPage from './auth/Login';
+import SignupPage from './auth/Signup';
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
 
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/signup" element={<SignupPage />}/>
       </Routes>
     </>
   );

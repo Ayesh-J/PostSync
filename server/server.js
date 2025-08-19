@@ -1,12 +1,11 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
-import mongoose from "mongoose";
 import connectDB from "./config/db.js";
 
 // Route imports
 import feedbackRoutes from "./routes/feedbackRoutes.js";
-
+import authRoutes from "./routes/authRoutes.js";
 // Load environment variables
 dotenv.config();
 
@@ -28,6 +27,7 @@ app.use(express.json());
 
 // API Routes
 app.use("/api/feedback", feedbackRoutes);
+app.use("/api/auth", authRoutes);
 
 // Root route
 app.get("/", (req, res) => {

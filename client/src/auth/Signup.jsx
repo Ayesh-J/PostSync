@@ -22,7 +22,7 @@ const SignupPage = () => {
     }
 
     try {
-      const response = await fetch("http://localhost:5000/api/signup", {
+      const response = await fetch("http://localhost:5000/api/auth/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -33,8 +33,8 @@ const SignupPage = () => {
       const data = await response.json();
 
       if (response.ok) {
-        localStorage.setItem("token", data.token);
-        navigate("/dashboard");
+        // instead of auto-login, go to login page
+        navigate("/login", { state: { successMessage: "Account created successfully. Please log in." } });
       } else {
         setError(data.message || "Signup failed");
       }
@@ -51,11 +51,9 @@ const SignupPage = () => {
         animate={{
           scale: 1,
           opacity: 1,
-          y: [0, -6, 0], // floating animation
+          y: [0, -6, 0],
         }}
-        transition={{
-          duration: 2,
-        }}
+        transition={{ duration: 2 }}
         whileHover={{ scale: 1.02 }}
         className="flex flex-col md:flex-row bg-white/10 backdrop-blur-md rounded-2xl shadow-xl w-full max-w-4xl overflow-hidden border border-white/20"
       >
@@ -182,10 +180,7 @@ const SignupPage = () => {
             transition={{ type: "spring", stiffness: 300 }}
             className="w-full max-w-xs flex items-center justify-center gap-2 bg-white text-black font-medium py-2 px-4 rounded-lg hover:bg-gray-100 transition"
           >
-            <img
-              src="https://img.icons8.com/color/16/000000/google-logo.png"
-              alt="Google"
-            />
+            <img src="https://img.icons8.com/color/16/000000/google-logo.png" alt="Google" />
             Sign up with Google
           </motion.button>
 
@@ -195,13 +190,16 @@ const SignupPage = () => {
             transition={{ type: "spring", stiffness: 300 }}
             className="w-full max-w-xs flex items-center justify-center gap-2 bg-[#3b5998] text-white font-medium py-2 px-4 rounded-lg hover:bg-[#2d4373] transition"
           >
-            <img
-              src="https://img.icons8.com/ios-filled/16/ffffff/facebook-new.png"
-              alt="Facebook"
-            />
+            <img src="https://img.icons8.com/ios-filled/16/ffffff/facebook-new.png" alt="Facebook" />
             Sign up with Facebook
           </motion.button>
-          <h3>Already have an account? <a href="/login" className="text-[#ffd700]">Login</a></h3>
+
+          <h3>
+            Already have an account?{" "}
+            <a href="/login" className="text-[#ffd700]">
+              Login
+            </a>
+          </h3>
         </motion.div>
       </motion.div>
     </div>

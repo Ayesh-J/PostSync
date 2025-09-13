@@ -1,4 +1,5 @@
 import React from "react";
+import {Link} from 'react-router-dom';
 import { Instagram, Youtube, Facebook, Twitter } from "lucide-react";
 
 const LandingPage = () => {
@@ -14,9 +15,11 @@ const LandingPage = () => {
                 <p className="text-lg md:text-xl mb-8 max-w-xl">
                     Your all-in-one platform for publishing content effortlessly across multiple social networks.
                 </p>
+                <Link to="/login">
                 <button className="border-white border-2 text-white px-6 py-2 rounded-2xl font-semibold hover:bg-white hover:text-[#1d176d] transition duration-300">
                     Get Started
                 </button>
+                </Link>
 
                 {/* Tagline and supported platforms */}
                 <div className="mt-10">

@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Mail, Lock, Eye, EyeOff } from "lucide-react";
+import { useAuth } from "../context/authContext"; //  correct path (note the casing)
 
 const LoginPage = () => {
-  const navigate = useNavigate();
+  const { login } = useAuth(); // use context
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -14,7 +14,7 @@ const LoginPage = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch("http://localhost:5000/api/login", {
+      const response = await fetch("http://localhost:5000/api/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -25,8 +25,8 @@ const LoginPage = () => {
       const data = await response.json();
 
       if (response.ok) {
-        localStorage.setItem("token", data.token);
-        navigate("/dashboard");
+        // ✅ Call AuthContext login
+        login(data.token, data.user.useremail);
       } else {
         setError(data.message || "Login failed");
       }
@@ -43,11 +43,9 @@ const LoginPage = () => {
         animate={{
           scale: 1,
           opacity: 1,
-          y: [0, -6, 0], // floating animation
+          y: [0, -6, 0],
         }}
-        transition={{
-          duration: 2,
-        }}
+        transition={{ duration: 2 }}
         whileHover={{ scale: 1.02 }}
         className="flex flex-col md:flex-row bg-white/10 backdrop-blur-md rounded-2xl shadow-xl w-full max-w-4xl overflow-hidden border border-white/20"
       >
@@ -77,10 +75,7 @@ const LoginPage = () => {
             {/* Email */}
             <div className="relative">
               <label className="block text-sm font-medium text-white">Email</label>
-              <Mail
-                size={18}
-                className="absolute left-3 top-9 text-white/70"
-              />
+              <Mail size={18} className="absolute left-3 top-9 text-white/70" />
               <input
                 type="email"
                 value={email}
@@ -94,10 +89,7 @@ const LoginPage = () => {
             {/* Password */}
             <div className="relative">
               <label className="block text-sm font-medium text-white">Password</label>
-              <Lock
-                size={18}
-                className="absolute left-3 top-9 text-white/70"
-              />
+              <Lock size={18} className="absolute left-3 top-9 text-white/70" />
               <input
                 type={showPassword ? "text" : "password"}
                 value={password}
@@ -145,10 +137,7 @@ const LoginPage = () => {
             transition={{ type: "spring", stiffness: 300 }}
             className="w-full max-w-xs flex items-center justify-center gap-2 bg-white text-black font-medium py-2 px-4 rounded-lg hover:bg-gray-100 transition"
           >
-            <img
-              src="https://img.icons8.com/color/16/000000/google-logo.png"
-              alt="Google"
-            />
+            <img src="https://img.icons8.com/color/16/000000/google-logo.png" alt="Google" />
             Continue with Google
           </motion.button>
 
@@ -158,14 +147,21 @@ const LoginPage = () => {
             transition={{ type: "spring", stiffness: 300 }}
             className="w-full max-w-xs flex items-center justify-center gap-2 bg-[#3b5998] text-white font-medium py-2 px-4 rounded-lg hover:bg-[#2d4373] transition"
           >
-            <img
-              src="https://img.icons8.com/ios-filled/16/ffffff/facebook-new.png"
-              alt="Facebook"
-            />
+            <img src="https://img.icons8.com/ios-filled/16/ffffff/facebook-new.png" alt="Facebook" />
             Continue with Facebook
           </motion.button>
-          <h3>New to PostSync? <a href="/signup" className="text-[#ffd700]">Create an account</a></h3>
-          <h2><a href="/forgot-password" className="text-[#ffd700]">Forgot password?</a></h2>
+
+          <h3>
+            New to PostSync?{" "}
+            <a href="/signup" className="text-[#ffd700]">
+              Create an account
+            </a>
+          </h3>
+          <h2>
+            <a href="/forgot-password" className="text-[#ffd700]">
+              Forgot password?
+            </a>
+          </h2>
         </motion.div>
       </motion.div>
     </div>

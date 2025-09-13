@@ -49,7 +49,7 @@ Platforms: ${selectedPlatforms.join(", ") || "None"}`;
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-100 to-slate-200 p-4 font-poppins">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-[#06032d] to-[#1d176d] p-4 font-poppins">
       <motion.div
         initial={{ opacity: 0, scale: 0.95, y: 30 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -57,9 +57,9 @@ Platforms: ${selectedPlatforms.join(", ") || "None"}`;
       >
         <header className="text-center mb-6">
           <img
-            src="https://placehold.co/80x80/6a5acd/FFFFFF/png?text=PS"
+            src="./PostSync_Logo.jpg"
             alt="PostSync Logo"
-            className="mb-3 rounded-full border-4 border-indigo-600 mx-auto"
+            className=" h-30 w-30 mb-3 rounded-full border-4 border-indigo-600 mx-auto"
           />
           <h1 className="text-2xl font-bold text-indigo-800">PostSync</h1>
           <p className="text-gray-500 text-sm md:text-base mt-1">

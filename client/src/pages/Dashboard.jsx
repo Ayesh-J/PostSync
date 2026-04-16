@@ -48,6 +48,62 @@ Platforms: ${selectedPlatforms.join(", ") || "None"}`;
     }
   };
 
+  // 🚀 NEW: REAL BACKEND CALL
+  const handlePublish = async () => {
+    if (!file) {
+      alert("Please upload a file");
+      return;
+    }
+
+    if (selectedPlatforms.length === 0) {
+      alert("Select at least one platform");
+      return;
+    }
+
+    try {
+      // Facebook posting
+      if (selectedPlatforms.includes("Facebook")) {
+        const formData = new FormData();
+        formData.append("caption", caption + " " + hashtags);
+        formData.append("image", file);
+
+        const response = await fetch("http://localhost:8080/api/facebook/post", {
+          method: "POST",
+          body: formData,
+        });
+
+        const result = await response.text();
+
+        if (!response.ok) {
+          throw new Error(result);
+        }
+
+        alert("Facebook पोस्ट successful!\n" + result);
+      }
+
+      // Future platforms (placeholder)
+      if (selectedPlatforms.includes("Instagram")) {
+        console.log("Instagram coming next...");
+      }
+
+      if (selectedPlatforms.includes("LinkedIn")) {
+        console.log("LinkedIn coming next...");
+      }
+
+      if (selectedPlatforms.includes("WhatsApp")) {
+        console.log("WhatsApp coming next...");
+      }
+
+      if (selectedPlatforms.includes("X")) {
+        console.log("Twitter/X coming next...");
+      }
+
+    } catch (error) {
+      console.error(error);
+      alert("Error: " + error.message);
+    }
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-[#06032d] to-[#1d176d] p-4 font-poppins">
       <motion.div
@@ -129,51 +185,47 @@ Platforms: ${selectedPlatforms.join(", ") || "None"}`;
             <h2 className="text-lg font-semibold text-indigo-600 mb-3">
               Add Your Message
             </h2>
-            <label className="block mb-2 font-medium text-gray-700">Caption:</label>
             <textarea
               className="w-full p-2 border rounded-md focus:ring-2 focus:ring-indigo-300"
               rows={3}
               value={caption}
               onChange={(e) => setCaption(e.target.value)}
-              placeholder="Craft your compelling caption here..."
+              placeholder="Craft your caption..."
             />
 
-            <label className="block mt-3 mb-2 font-medium text-gray-700">
-              Hashtags:
-            </label>
             <input
               type="text"
-              className="w-full p-2 border rounded-md focus:ring-2 focus:ring-indigo-300"
+              className="w-full p-2 mt-3 border rounded-md focus:ring-2 focus:ring-indigo-300"
               value={hashtags}
               onChange={(e) => setHashtags(e.target.value)}
-              placeholder="#PostSync #SocialMediaTips #DigitalMarketing"
+              placeholder="#hashtags"
             />
           </section>
 
           {/* Platform Select */}
           <section className="bg-slate-50 p-4 rounded-xl shadow-inner">
             <h2 className="text-lg font-semibold text-indigo-600 mb-3">
-              Choose Social Media Platforms
+              Choose Platforms
             </h2>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
               {[
-                { name: "Facebook", icon: <Facebook className="text-blue-600" size={24} /> },
-                { name: "Instagram", icon: <Instagram className="text-pink-500" size={24} /> },
-                { name: "WhatsApp", icon: <MessageCircle className="text-green-500" size={24} /> },
-                { name: "LinkedIn", icon: <Linkedin className="text-blue-700" size={24} /> },
-                { name: "X", icon: <Twitter className="text-black" size={24} /> },
+                { name: "Facebook", icon: <Facebook className="text-blue-600" /> },
+                { name: "Instagram", icon: <Instagram className="text-pink-500" /> },
+                { name: "WhatsApp", icon: <MessageCircle className="text-green-500" /> },
+                { name: "LinkedIn", icon: <Linkedin className="text-blue-700" /> },
+                { name: "X", icon: <Twitter className="text-black" /> },
               ].map((platform) => (
                 <div
                   key={platform.name}
                   onClick={() => handlePlatformToggle(platform.name)}
-                  className={`flex flex-col items-center p-3 border rounded-lg cursor-pointer shadow-sm hover:shadow-md transition ${
+                  className={`p-3 border rounded-lg text-center cursor-pointer ${
                     selectedPlatforms.includes(platform.name)
-                      ? "border-green-500 bg-green-50"
-                      : "border-gray-200 bg-white"
+                      ? "bg-green-100 border-green-500"
+                      : ""
                   }`}
                 >
                   {platform.icon}
-                  <p className="mt-2 text-sm font-semibold">{platform.name}</p>
+                  <p>{platform.name}</p>
                 </div>
               ))}
             </div>
@@ -182,89 +234,41 @@ Platforms: ${selectedPlatforms.join(", ") || "None"}`;
           <div className="text-center">
             <button
               type="submit"
-              className="px-6 py-2 bg-indigo-600 text-white font-semibold rounded-full shadow hover:bg-indigo-700 transition"
+              className="px-6 py-2 bg-indigo-600 text-white rounded-full"
             >
-              <Eye className="inline-block mr-2" size={18} /> Preview Post
+              <Eye className="inline mr-2" /> Preview
             </button>
           </div>
         </form>
 
         <footer className="text-center text-gray-400 text-sm mt-6 border-t pt-3">
-          © 2025 PostSync. All rights reserved.
+          © 2025 PostSync
         </footer>
       </motion.div>
 
       {/* Preview Modal */}
       <Dialog open={previewOpen} onClose={() => setPreviewOpen(false)}>
-        <div className="fixed inset-0 bg-black/40 flex items-center justify-center p-4">
-          <Dialog.Panel className="bg-white rounded-xl shadow-xl max-w-2xl w-full p-6">
-            <Dialog.Title className="text-xl font-bold text-indigo-700 mb-4">
-              Your Post Preview
-            </Dialog.Title>
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center">
+          <Dialog.Panel className="bg-white p-6 rounded-xl max-w-xl w-full">
+            <h2 className="text-xl font-bold mb-4">Preview</h2>
 
             {file && (
-              <div className="mb-4 text-center">
-                {file.type.startsWith("image/") && (
-                  <img
-                    src={URL.createObjectURL(file)}
-                    alt="Preview"
-                    className="max-h-52 mx-auto rounded-lg shadow"
-                  />
-                )}
-                {file.type.startsWith("video/") && (
-                  <video
-                    src={URL.createObjectURL(file)}
-                    controls
-                    className="max-h-60 mx-auto rounded-lg shadow"
-                  />
-                )}
-                {file.type.startsWith("audio/") && (
-                  <audio
-                    src={URL.createObjectURL(file)}
-                    controls
-                    className="w-full"
-                  />
-                )}
-              </div>
+              <img
+                src={URL.createObjectURL(file)}
+                alt="preview"
+                className="max-h-52 mx-auto"
+              />
             )}
 
-            <p className="mb-2"><strong>File:</strong> {file?.name || "No file uploaded"}</p>
-            <p className="mb-2"><strong>Caption:</strong> {caption || "No caption provided"}</p>
-            <p className="mb-2"><strong>Hashtags:</strong> {hashtags || "No hashtags provided"}</p>
-            <p className="mb-2 font-semibold">Platforms:</p>
-            <ul className="list-disc list-inside">
-              {selectedPlatforms.length > 0 ? (
-                selectedPlatforms.map((p) => <li key={p}>{p}</li>)
-              ) : (
-                <li className="text-red-500">No platforms selected</li>
-              )}
-            </ul>
+            <p><b>Caption:</b> {caption}</p>
+            <p><b>Hashtags:</b> {hashtags}</p>
 
-            <div className="flex gap-2 justify-end mt-6 flex-wrap">
-              <button
-                onClick={() => window.print()}
-                className="px-4 py-2 bg-gray-600 text-white rounded-md flex items-center gap-2 hover:bg-gray-700"
-              >
-                <Printer size={18} /> Print
-              </button>
-              <button
-                onClick={copyContent}
-                className="px-4 py-2 bg-blue-600 text-white rounded-md flex items-center gap-2 hover:bg-blue-700"
-              >
-                <Copy size={18} /> Copy Content
-              </button>
-              <button
-                onClick={() => alert("Your content has been published! (simulation)")}
-                disabled={selectedPlatforms.length === 0}
-                className={`px-4 py-2 rounded-md flex items-center gap-2 text-white font-semibold transition ${
-                  selectedPlatforms.length > 0
-                    ? "bg-green-600 hover:bg-green-700"
-                    : "bg-gray-300 cursor-not-allowed"
-                }`}
-              >
-                <Send size={18} /> Publish
-              </button>
-            </div>
+            <button
+              onClick={handlePublish}
+              className="mt-4 px-4 py-2 bg-green-600 text-white rounded"
+            >
+              <Send className="inline mr-2" /> Publish
+            </button>
           </Dialog.Panel>
         </div>
       </Dialog>

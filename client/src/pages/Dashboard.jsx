@@ -218,11 +218,10 @@ Platforms: ${selectedPlatforms.join(", ") || "None"}`;
                 <div
                   key={platform.name}
                   onClick={() => handlePlatformToggle(platform.name)}
-                  className={`p-3 border rounded-lg text-center cursor-pointer ${
-                    selectedPlatforms.includes(platform.name)
+                  className={`p-3 border rounded-lg text-center cursor-pointer ${selectedPlatforms.includes(platform.name)
                       ? "bg-green-100 border-green-500"
                       : ""
-                  }`}
+                    }`}
                 >
                   {platform.icon}
                   <p>{platform.name}</p>
